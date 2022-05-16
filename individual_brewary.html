@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        #navbar{
+            background-color: rgb(61, 61, 61);
+            padding: 2%;
+            display: flex;
+            justify-content:end;
+        }
+        #navbar>div{
+            /* margin: 1%; */
+            /* border: 1px solid green; */
+            /* padding: 2%; */
+            width: 10%;
+        }
+        #navbar>div>a{
+            text-decoration: none;
+            color: white;
+            padding: 3%;
+            margin: 6%;
+            /* border: 1px solid yellow; */
+
+        }
+        #details_div{
+            /* border: 1px solid red; */
+        }
+        #details_div>div{
+            padding: 1%;
+            font-size: 23px;
+            width: 40%;
+            margin: auto;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+        }
+        h1{
+            text-align: center;
+            margin: 3%;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="navbar">
+            <div>
+                <a href="./index.html">Home</a>
+                <a href="./search.html">Search</a>
+            </div>
+        </div>
+        <h1>More Details</h1>
+        <div id="details_div">
+
+        </div>
+       
+    </div>
+</body>
+<script>
+    let cont = document.getElementById("details_div");
+    async function getData(){
+        let id = JSON.parse(localStorage.getItem("brew_id"));
+        let res = await fetch(`https://api.openbrewerydb.org/breweries/${id}`);
+        let data = await res.json();
+        displayData(data);
+    }
+
+    function displayData(data){
+        let name = document.createElement("div");
+        name.innerHTML = `<b>Name: </b> ${data.name}`;
+
+        let type = document.createElement("div");
+        type.innerHTML = `<b>Type: </b> ${data.brewery_type}`;
+
+        let city = document.createElement("div");
+        city.innerHTML = `<b>City: </b> ${data.city}`;
+
+        let state = document.createElement("div");
+        state.innerHTML = `<b>State: </b> ${data.state}`;
+
+        let country = document.createElement("div");
+        country.innerHTML = `<b>Country: </b> ${data.country}`;
+
+        let postalcode = document.createElement("div");
+        postalcode.innerHTML = `<b>postalcode: </b> ${data.postal_code}`;
+
+        let phone = document.createElement("div");
+        phone.innerHTML = `<b>Phone: </b> ${data.phone}`;
+
+        let web_url = document.createElement("div");
+        if(data.website_url == null){
+            web_url.innerHTML = `<b>Website: </b> Unavailable`;
+        }
+        else{
+        web_url.innerHTML = `<b>Website: </b> ${data.website_url}`;
+        }
+
+        cont.append(name,type,city,state,country,postalcode,phone,web_url);
+    }
+
+    getData();
+</script>
+</html>
+
+<!-- name, type, city, state, country, postalcode, phone, websiteurl -->
+
+<!-- {
+    "id": "common-john-brewing-co-manchester",
+    "name": "Common John Brewing Co",
+    "brewery_type": "planning",
+    "street": null,
+    "address_2": null,
+    "address_3": null,
+    "city": "Manchester",
+    "state": "Tennessee",
+    "county_province": null,
+    "postal_code": "37355-6064",
+    "country": "United States",
+    "longitude": null,
+    "latitude": null,
+    "phone": "9314090630",
+    "website_url": "http://www.commonjohnbc.com",
+    "updated_at": "2021-10-23T02:24:55.243Z",
+    "created_at": "2021-10-23T02:24:55.243Z"
+  } -->

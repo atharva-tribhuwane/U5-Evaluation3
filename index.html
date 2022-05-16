@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+        }
+        #navbar{
+            background-color: rgb(61, 61, 61);
+            padding: 2%;
+            display: flex;
+            justify-content:end;
+        }
+        #navbar>div{
+            /* margin: 1%; */
+            /* border: 1px solid green; */
+            /* padding: 2%; */
+            width: 10%;
+        }
+        #navbar>div>a{
+            text-decoration: none;
+            color: white;
+            padding: 3%;
+            margin: 6%;
+            /* border: 1px solid yellow; */
+
+        }
+        #container{
+            width: 40%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar">
+        <div>
+            <a href="./index.html">Home</a>
+            <a href="./search.html">Search</a>
+        </div>
+    </div>
+    <div id="container">
+
+        <h1>Brewery List:</h1>
+
+        <select id="sel" >
+            <option value="null" disabled selected></option>
+            <option value="micro" onselect="hii()">micro</option>
+            <option value="planning">planning</option>
+            <option value="brewpub">brewpub</option>
+        </select>
+
+
+        <table id="tbl" border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>City</th>
+                    <th>State</th>
+                    <th>More Details</th>
+                </tr>
+            </thead>
+            <tbody id="tbdy">
+                
+            </tbody>
+        </table>
+    </div>
+</body>
+<script>
+    let tbdy = document.getElementById("tbdy");
+    let dta;
+    async function getData(){
+        let res = await fetch("https://api.openbrewerydb.org/breweries");
+        let data = await res.json();
+        dta = data;
+        displayData(data);
+    }
+
+    function displayData(data){
+
+        data.forEach(function(brew){
+            let tr = document.createElement("tr");
+
+            let td1 = document.createElement("td");
+            td1.innerHTML = brew.name;
+            let td2 = document.createElement("td");
+            td2.innerHTML = brew.brewery_type;
+            let td3 = document.createElement("td");
+            td3.innerHTML = brew.city;
+            let td4 = document.createElement("td");
+            td4.innerHTML = brew.state;
+            let td5 = document.createElement("td");
+            td5.innerHTML = `<a href="" onclick="getBrew('${brew.id}')">Click Here!</a>`;
+            tr.append(td1,td2,td3,td4,td5);
+            tbdy.append(tr);
+        });
+    }
+
+    function getBrew(brew_id){
+        event.preventDefault();
+        localStorage.setItem("brew_id", JSON.stringify(brew_id));
+        location.href = "./individual_brewary.html"
+    }
+
+   
+    document.querySelector("#sel").addEventListener("change",function(){
+        event.preventDefault();
+        let sel_val = document.getElementById("sel").value;
+        tbdy.innerHTML = "";
+        
+        dta.forEach(function(brew){
+            if(brew.brewery_type == sel_val){
+                console.log(brew.name);
+            let tr = document.createElement("tr");
+
+            let td1 = document.createElement("td");
+            td1.innerHTML = brew.name;
+            let td2 = document.createElement("td");
+            td2.innerHTML = brew.brewery_type;
+            let td3 = document.createElement("td");
+            td3.innerHTML = brew.city;
+            let td4 = document.createElement("td");
+            td4.innerHTML = brew.state;
+            let td5 = document.createElement("td");
+            td5.innerHTML = `<a href="" onclick="getBrew('${brew.id}')">Click Here!</a>`;
+            tr.append(td1,td2,td3,td4,td5);
+            tbdy.append(tr);
+            }
+            
+        });
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    getData();
+</script>
+</html>
+
